@@ -3,13 +3,19 @@ import pandas as pd
 import os
 
 # Fixture to read the CSV file
-@pytest.fixture(scope='session')
-def read_file():
-    test_dir = os.path.dirname(__file__)  # tests/
-    project_root = os.path.abspath(os.path.join(test_dir, '..'))  # PyTest Introduction/
-    file_path = os.path.join(project_root, 'src', 'data', 'data.csv')
+@pytest.fixture(scope='session',params =["src/data/data.csv"])
+# def read_file():
+#     test_dir = os.path.dirname(__file__)  # tests/
+#     project_root = os.path.abspath(os.path.join(test_dir, '..'))  # PyTest Introduction/
+#     file_path = os.path.join(project_root, 'src', 'data', 'data.csv')
+#     df = pd.read_csv(file_path)
+#     return df
+def read_file(request):
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    file_path = os.path.join(project_root, request.param)
     df = pd.read_csv(file_path)
     return df
+
 
 # Fixture to validate the schema of the file
 @pytest.fixture(scope='session',params = ['actual_schema','expected_schema'])
