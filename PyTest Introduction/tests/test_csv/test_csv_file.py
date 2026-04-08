@@ -14,15 +14,16 @@ def test_duplicates(read_file):
     assert duplicates.empty, f"duplicated rows:\n{duplicates}"
 
 @pytest.mark.validate_csv
-def test_validate_schema(validate_schema):
-    actual_schema,expected_schema = validate_schema
+def test_validate_schema(read_file,validate_schema):
+    expected_schema = ['id', 'name', 'age', 'email', 'is_active']
+    actual_schema = list(read_file.columns)
     assert actual_schema==expected_schema,'invalid schema'
 
 @pytest.mark.validate_csv
 @pytest.mark.skip(reason="Not implemented yet")
 def test_age_column_valid(read_file):
     condition = read_file.age.between(0, 100)
-    assert condition.all(),'invalid age'
+    assert condition.all(),'age less than 0 or greater than 100'
 
 @pytest.mark.validate_csv
 def test_email_column_valid(read_file):

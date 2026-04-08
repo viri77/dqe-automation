@@ -4,12 +4,6 @@ import os
 
 # Fixture to read the CSV file
 @pytest.fixture(scope='session',params =["src/data/data.csv"])
-# def read_file():
-#     test_dir = os.path.dirname(__file__)  # tests/
-#     project_root = os.path.abspath(os.path.join(test_dir, '..'))  # PyTest Introduction/
-#     file_path = os.path.join(project_root, 'src', 'data', 'data.csv')
-#     df = pd.read_csv(file_path)
-#     return df
 def read_file(request):
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     file_path = os.path.join(project_root, request.param)
@@ -18,15 +12,15 @@ def read_file(request):
 
 
 # Fixture to validate the schema of the file
-@pytest.fixture(scope='session',params = ['actual_schema','expected_schema'])
-def validate_schema(read_file):
-    actual_schema = list(read_file.columns)
-    expected_schema = ['id', 'name', 'age', 'email', 'is_active']
-    return actual_schema, expected_schema
+@pytest.fixture(scope='session')
+def validate_schema():
+    def _validate_schema(actual_schema, expected_schema):
+        return actual_schema==expected_schema
+    return _validate_schema
 
 
 # Pytest hook to mark unmarked tests with a custom mark
-def pytest_collection_modifyitems(config, items):
+def pytest_collection_modifyitems( items):
     for item in items:
         if not item.own_markers:
             item.add_marker(pytest.mark.unmarked)
