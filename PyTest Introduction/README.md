@@ -22,6 +22,8 @@ venv\Scripts\activate
 # Install requirements
 pip install -r requirements.txt
 
+## Command used to run tests
+
 # Run all tests
 pytest tests
 
