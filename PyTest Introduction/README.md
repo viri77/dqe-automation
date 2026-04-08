@@ -29,7 +29,7 @@ pytest tests
 
 
 # Run unmarked tests
-pytest -m unmarked --html=reports/unmarked_report.html
+pytest tests -m unmarked --html=reports/unmarked_report.html
 
 # Run validate_csv and not xfail tests
-pytest -m "validate_csv and not xfail" --html=reports/validate_csv_report.html
+pytest tests -m "validate_csv and not xfail" --html=reports/validate_csv_report.html
