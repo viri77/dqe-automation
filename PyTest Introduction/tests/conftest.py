@@ -4,7 +4,7 @@ import os
 
 # Fixture to read the CSV file
 @pytest.fixture(scope='session')
-def read_file(request):
+def read_file():
     def _read_file(path_to_file):
         return pd.read_csv(path_to_file)
     return _read_file
