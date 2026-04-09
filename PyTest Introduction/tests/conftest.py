@@ -3,13 +3,10 @@ import pandas as pd
 import os
 
 # Fixture to read the CSV file
-@pytest.fixture(scope='session',params =["src/data/data.csv"])
+@pytest.fixture(scope='session')
 def read_file(request):
     def _read_file(path_to_file):
-        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-        file_path = os.path.join(project_root, request.param)
-        df = pd.read_csv(file_path)
-        return df
+        return pd.read_csv(path_to_file)
     return _read_file
 
 
