@@ -1,18 +1,27 @@
 pipeline {
     agent any
-
     environment {
         POSTGRES_SECRET_USR = credentials('jenkins-postgres-username')
         POSTGRES_SECRET_PSW = credentials('jenkins-postgres-password')
     }
-
     stages {
-        stage('Checkout') {
+        stage('Update Packages') {
             steps {
-                checkout scm
+                sh 'apt-get update'
+                sh 'apt-get install -y libpq-dev'
             }
         }
-        stage('Setup Python venv') {
+        stage('Install Python') {
+            steps {
+                sh 'apt-get install -y python3 python3-pip python3-venv'
+            }
+        }
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/viri77/dqe-automation.git'
+            }
+        }
+        stage('Install Dependencies') {
             steps {
                 sh '''
                     python3 -m venv venv
@@ -39,7 +48,6 @@ pipeline {
         stage('Archive Test Report') {
             steps {
                 archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
-
                 publishHTML(target: [
                     allowMissing: false,
                     keepAll: true,
@@ -48,6 +56,17 @@ pipeline {
                     reportName: 'HTML Test Report'
                 ])
             }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline execution completed.'
+        }
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs for details.'
         }
     }
 }
