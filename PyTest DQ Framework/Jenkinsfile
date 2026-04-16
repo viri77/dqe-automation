@@ -57,7 +57,7 @@ pipeline {
         }
         stage('Archive Test Report') {
             steps {
-                archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
                 publishHTML(target: [
                     allowMissing: true,
                     keepAll: true,
@@ -70,7 +70,7 @@ pipeline {
     }
  post {
         always {
-            archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
             script {
                 try {
                     publishHTML(target: [
