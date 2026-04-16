@@ -1,6 +1,6 @@
 """
-Description: Data Quality checks ...
-Requirement(s): TICKET-1234
+Description: Data Quality checks for test_facility_name_min_time_spent_per_visit_date
+Requirement(s): TICKET-1235
 Author(s): Olha Karpenko
 """
 
@@ -86,5 +86,6 @@ def test_check_data_column_completness(source_data, target_data, data_quality_li
 @pytest.mark.parquet_data
 @pytest.mark.facility_name_min_time_spent_per_visit_date
 def test_check_data_rows_completness(source_data, target_data, data_quality_library):
-    missing_rows= data_quality_library.check_data_rows_completness(source_data,target_data)
+    key_columns = ['facility_name', 'visit_date', 'min_time_spent']
+    missing_rows= data_quality_library.check_data_rows_completness(source_data,target_data,key_columns)
     assert missing_rows.empty,f'Missing columns in target data set: {missing_rows}'

@@ -46,8 +46,7 @@ class DataQualityLibrary:
         return missing_columns
 
     @staticmethod
-    def check_data_rows_completness(source_data, target_data):
-        key_columns = ['facility_name', 'visit_date','min_time_spent']
+    def check_data_rows_completness(source_data, target_data,key_columns):
         merged = source_data.merge(target_data, on=key_columns, how='left', indicator=True)
         missing_rows = merged[merged['_merge'] == 'left_only']
         return missing_rows
