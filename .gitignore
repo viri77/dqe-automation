@@ -7,3 +7,5 @@ __pycache__/
 src/data/data.csv
 report_all.html
 logs/
+.vscode
+.codemie
