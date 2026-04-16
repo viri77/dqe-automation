@@ -41,6 +41,7 @@ pipeline {
         }
         stage('Run PyTest') {
             steps {
+                sh 'rm -f "PyTest DQ Framework/html_report/report_example.html"'
                 sh '''
                     cd "PyTest DQ Framework"
                     . ../venv/bin/activate
