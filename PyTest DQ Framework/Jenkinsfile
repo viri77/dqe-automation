@@ -38,11 +38,11 @@ pipeline {
                     . ../venv/bin/activate
                     pytest tests -m "parquet_data" \
                         --db_host="postgres" \
-                        --db_port="5434" \
+                        --db_port="5432" \
                         --db_name="mydatabase" \
                         --db_user=$POSTGRES_SECRET_USR \
                         --db_password=$POSTGRES_SECRET_PSW \
-                        --html=html_report/report.html
+                        --html=html_report/report_example.html
                 '''
             }
         }
