@@ -2,20 +2,30 @@ pipeline {
     agent any
 
     environment {
-        // Получаем секреты из Jenkins Credentials Store
         POSTGRES_SECRET_USR = credentials('jenkins-postgres-username')
         POSTGRES_SECRET_PSW = credentials('jenkins-postgres-password')
     }
 
     stages {
-        stage('Install dependencies') {
+        stage('Checkout') {
             steps {
-                sh 'pip install -r requirements.txt'
+                checkout scm
+            }
+        }
+        stage('Setup Python venv') {
+            steps {
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
         stage('Run PyTest') {
             steps {
                 sh '''
+                    . venv/bin/activate
                     pytest tests -m "parquet_data" \
                         --db_host="postgres" \
                         --db_port="5432" \
@@ -28,15 +38,13 @@ pipeline {
         }
         stage('Archive Test Report') {
             steps {
-                // Архивируем всю папку html_report (включая assets)
-                archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
 
-                // Публикуем HTML-отчёт
                 publishHTML(target: [
                     allowMissing: false,
                     keepAll: true,
-                    reportDir: 'PyTest DQ Framework/html_report',
-                    reportFiles: 'report.html', // или 'index.html', если переименовали
+                    reportDir: 'html_report',
+                    reportFiles: 'report.html',
                     reportName: 'HTML Test Report'
                 ])
             }
