@@ -67,16 +67,22 @@ pipeline {
             }
         }
     }
-    post {
+ post {
         always {
-            archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
-            publishHTML(target: [
-                allowMissing: false,
-                keepAll: true,
-                reportDir: 'PyTest DQ Framework/html_report',
-                reportFiles: 'report_example.html',
-                reportName: 'HTML Test Report'
-            ])
+            archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
+            script {
+                try {
+                    publishHTML(target: [
+                        allowMissing: true,
+                        keepAll: true,
+                        reportDir: 'html_report',
+                        reportFiles: 'report.html',
+                        reportName: 'HTML Test Report'
+                    ])
+                } catch (err) {
+                    echo "publishHTML failed: ${err}"
+                }
+            }
         }
     }
 }
