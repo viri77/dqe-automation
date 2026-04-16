@@ -1,7 +1,7 @@
 """
 Description: Data Quality checks ...
 Requirement(s): TICKET-1234
-Author(s): Name Surname
+Author(s): Olha Karpenko
 """
 
 import pytest

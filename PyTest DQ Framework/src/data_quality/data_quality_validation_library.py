@@ -13,13 +13,16 @@ class DataQualityLibrary:
     @staticmethod
     def check_duplicates(df, column_names=None):
         if column_names:
-            df.duplicated(column_names)
+            duplicated_rows = df.duplicated(column_names)
         else:
-            df.duplicated()
+            duplicated_rows = df.duplicated()
+        return df[duplicated_rows]
 
     @staticmethod
     def check_count(df1, df2):
-        return len(df1) == len(df2)
+        count_source = len(df1)
+        count_target = len(df2)
+        return count_source,count_target
 
     @staticmethod
     def check_data_full_data_set(df1, df2):
@@ -36,3 +39,16 @@ class DataQualityLibrary:
         else:
             null_rows = df[df.isnull().any(axis=1)]
         return null_rows
+
+    @staticmethod
+    def check_data_column_completness(source_data, target_data):
+        missing_columns = set(source_data.columns) - set(target_data.columns)
+        return missing_columns
+
+    @staticmethod
+    def check_data_rows_completness(source_data, target_data):
+        key_columns = ['facility_name', 'visit_date','min_time_spent']
+        merged = source_data.merge(target_data, on=key_columns, how='left', indicator=True)
+        missing_rows = merged[merged['_merge'] == 'left_only']
+        return missing_rows
+

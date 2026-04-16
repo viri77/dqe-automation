@@ -1,65 +1,45 @@
 pipeline {
     agent any
-    stages {
-        stage('Update Packages') {
-            steps {
-                script {
-                    // Update the package list
-                    sh 'apt-get update'
-                    sh 'apt-get install -y libpq-dev'
-                }
-            }
-        }
-        stage('Install Python') {
-            steps {
-                // Install Python and pip
-                sh 'apt-get install -y python3 python3-pip python3-venv'
-            }
-        }
-        stage('Clone Repository') {
-            steps {
-                script {
-                    // Clone the Git repository
-                    git branch: 'main', url: 'https://github.com/DanyaHDanny/dqe-automation'
-                }
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    // Create a virtual environment
-                    sh '''
-                        python3 -m venv venv
-                        . venv/bin/activate
-                        pip install -r PyTest DQ Framework/requirements.txt
-                    '''
-                }
-            }
-        }
-        stage('Run main') {
-            steps {
-                script {
-                    // Activate the virtual environment, set PYTHONPATH, and run the script
-                    sh '''
-                        . venv/bin/activate
-                        export PYTHONPATH=$WORKSPACE
-                        python PyTest DQ Framework/main.py
-                    '''
-                }
-            }
-        }
+
+    environment {
+        // Получаем секреты из Jenkins Credentials Store
+        POSTGRES_SECRET_USR = credentials('jenkins-postgres-username')
+        POSTGRES_SECRET_PSW = credentials('jenkins-postgres-password')
     }
-    post {
-        always {
-            echo 'Pipeline execution completed.'
+
+    stages {
+        stage('Install dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
         }
-        success {
-            echo 'Pipeline executed successfully!'
+        stage('Run PyTest') {
+            steps {
+                sh '''
+                    pytest tests -m "parquet_data" \
+                        --db_host="postgres" \
+                        --db_port="5432" \
+                        --db_name="mydatabase" \
+                        --db_user=$POSTGRES_SECRET_USR \
+                        --db_password=$POSTGRES_SECRET_PSW \
+                        --html=html_report/report.html
+                '''
+            }
         }
-        failure {
-            echo 'Pipeline failed. Please check the logs for details.'
+        stage('Archive Test Report') {
+            steps {
+                // Архивируем всю папку html_report (включая assets)
+                archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
+
+                // Публикуем HTML-отчёт
+                publishHTML(target: [
+                    allowMissing: false,
+                    keepAll: true,
+                    reportDir: 'PyTest DQ Framework/html_report',
+                    reportFiles: 'report.html', // или 'index.html', если переименовали
+                    reportName: 'HTML Test Report'
+                ])
+            }
         }
     }
 }
-
-
