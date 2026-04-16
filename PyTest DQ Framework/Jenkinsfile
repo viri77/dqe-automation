@@ -11,6 +11,14 @@ pipeline {
                 sh 'apt-get install -y libpq-dev'
             }
         }
+                stage('Install PostgreSQL Client') {
+            steps {
+                sh '''
+                    apt-get update
+                    apt-get install -y postgresql-client
+                '''
+            }
+        }
         stage('Install Python') {
             steps {
                 sh 'apt-get install -y python3 python3-pip python3-venv'
