@@ -13,23 +13,26 @@ class DataQualityLibrary:
     @staticmethod
     def check_duplicates(df, column_names=None):
         if column_names:
-            df.duplicates(column_names)
+            df.duplicated(column_names)
         else:
-            df.duplicates(all_columns)
+            df.duplicated()
 
     @staticmethod
     def check_count(df1, df2):
-        df1.count = df2.count
+        return len(df1) == len(df2)
 
     @staticmethod
     def check_data_full_data_set(df1, df2):
-        df1 = df2
+        return df1.equals(df2)
 
     @staticmethod
     def check_dataset_is_not_empty(df):
-        df.is_not_empty
+        return not df.empty
 
     @staticmethod
     def check_not_null_values(df, column_names=None):
-        col for df.column_names:
-            col.not_null
+        if column_names:
+            null_rows = df[df[column_names].isnull().any(axis=1)]
+        else:
+            null_rows = df[df.isnull().any(axis=1)]
+        return null_rows

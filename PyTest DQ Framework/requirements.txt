@@ -1,0 +1,6 @@
+pytest
+pandas
+requests
+psycopg2
+pyarrow
+pytest-html
