@@ -61,14 +61,14 @@ def test_check_duplicates(data_quality_library,target_data):
 
 @pytest.mark.parquet_data
 @pytest.mark.patient_sum_treatment_cost_per_facility_type
-def test_check_data_full_data_set(target_data,source_data,data_quality_library):
-    data_quality_library.check_data_full_data_set(target_data,source_data)
+def test_check_data_sets_equality(target_data,source_data,data_quality_library):
+    data_quality_library.check_data_sets_equality(target_data, source_data)
 
 #columns completness
 @pytest.mark.parquet_data
 @pytest.mark.patient_sum_treatment_cost_per_facility_type
-def test_check_data_column_completness(source_data, target_data, data_quality_library):
-    data_quality_library.check_data_column_completness(source_data,target_data)
+def test_check_data_column_availability(source_data, target_data, data_quality_library):
+    data_quality_library.check_data_column_availability(source_data,target_data)
 
 @pytest.mark.parquet_data
 @pytest.mark.patient_sum_treatment_cost_per_facility_type

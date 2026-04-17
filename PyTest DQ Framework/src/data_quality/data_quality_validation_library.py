@@ -33,8 +33,12 @@ class DataQualityLibrary:
                                               f'in source: {count_source}, target: {count_target}')
 
     @staticmethod
-    def check_data_full_data_set(df1, df2):
-        assert df1.equals(df2),'Data sets are not matching'
+    def check_data_sets_equality(df1, df2):
+        assert df1.shape[1] == df2.shape[1], "Number of columns does not match"
+        assert df1.shape[0] == df2.shape[0], "Number of rows does not match"
+        df1_sorted = df1.sort_values(list(df1.columns)).reset_index(drop=True)
+        df2_sorted = df2.sort_values(list(df2.columns)).reset_index(drop=True)
+        assert df1_sorted.equals(df2_sorted), "Data content does not match"
 
     @staticmethod
     def check_dataset_is_not_empty(df):
@@ -49,7 +53,7 @@ class DataQualityLibrary:
         assert null_rows.empty, f'Nulls in target data set,in the fields: {null_rows}'
 
     @staticmethod
-    def check_data_column_completness(source_data, target_data):
+    def check_data_column_availability(source_data, target_data):
         missing_columns = set(source_data.columns) - set(target_data.columns)
         assert not missing_columns, f'Missing columns in target data set: {missing_columns}'
 
