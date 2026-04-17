@@ -42,6 +42,11 @@ podman cp jenkins:/parquet_data "PyTest DQ Framework/parquet_data"
 -locally
 pytest tests -m "parquet_data" --db_host="localhost" --db_port="5434" --db_name="mydatabase" --db_user="myuser" --db_password="mypassword" 
 
+pytest tests -m "facility_name_min_time_spent_per_visit_date" --db_host="localhost" --db_port="5434" --db_name="mydatabase" --db_user="myuser" --db_password="mypassword"      
+
+pytest tests -m "facility_type_avg_time_spent_per_visit_date" --db_host="localhost" --db_port="5434" --db_name="mydatabase" --db_user="myuser" --db_password="mypassword
+
+pytest tests -m "patient_sum_treatment_cost_per_facility_type" --db_host="localhost" --db_port="5434" --db_name="mydatabase" --db_user="myuser" --db_password="mypassword"    
 ## Access Jenkins
 
 Open your browser and navigate to: http://localhost:8080
