@@ -14,18 +14,16 @@ from selenium.common.exceptions import WebDriverException
 
 class SeleniumWebDriverContextManager:
     def __init__(self):
-        self.driver = None
-
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
 
     def __enter__(self):
         try:
-            self.driver = webdriver.Chrome()
-            self.driver.maximize_window()
             return self.driver
         except  WebDriverException as e:
                 print(f"launch webdriver exception: {e}")
         except  TimeoutException as e:
-                print(f"timeoute exception: {e}")
+                print(f"timeout exception: {e}")
                 raise
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -107,31 +105,36 @@ if __name__ == "__main__":
             try:
                 donut[i].click()
                 time.sleep(2)
-                chart = driver.find_element(By.CLASS_NAME, "pielayer")
-                chart.screenshot(f"screenshot{i + 1}.png")
-            except WebDriverException as e:
-                driver.save_screenshot(f"screenshot{i + 1}.png")
+                try:
+                    chart = driver.find_element(By.CLASS_NAME, "pielayer")
+                    chart.screenshot(f"screenshot{i + 1}.png")
+                except (NoSuchElementException, WebDriverException):
+                    driver.save_screenshot(f"screenshot{i + 1}.png")
 
-            time.sleep(1)
-            try:
+                time.sleep(1)
                 texts = driver.find_elements(By.CSS_SELECTOR, "text.slicetext")
-                if not texts:
-                    raise NoSuchElementException("No slicetext elements found")
                 data = []
-                for t in texts:
-                    raw = t.get_attribute("data-unformatted")
-                    if not raw:
-                        raise NoSuchElementException("No data found")
-                    elif raw:
-                        parts = raw.replace('&lt;br&gt;', '\n').replace('<br>', '\n').split('\n')
-                        label = parts[0].strip()
-                        value = parts[1].strip()
-                        data.append([label, value])
-            except Exception as e:
-                pass
-            with open(f"doughnut{i + 1}.csv", mode="w", newline='', encoding="utf-8") as f:
-                writer = csv.writer(f)
-                writer.writerow(["Facility Type", "Min average time spent"])
-                writer.writerows(data)
+                if texts:
+                    for t in texts:
+                        raw = t.get_attribute("data-unformatted")
+                        if raw:
+                            parts = raw.replace('&lt;br&gt;', '\n').replace('<br>', '\n').split('\n')
+                            if len(parts) >= 2:
+                                label = parts[0].strip()
+                                value = parts[1].strip()
+                                data.append([label, value])
+                        print(raw)
+                    print(data)
+                else:
+                    print("Pie chart disappeared, writing only header.")
 
-            time.sleep(5)
+                with open(f"doughnut{i + 1}.csv", mode="w", newline='', encoding="utf-8") as f:
+                    writer = csv.writer(f)
+                    writer.writerow(["Facility Type", "Min average time spent"])
+                    if data:
+                        writer.writerows(data)
+                    # Если data пустой, будет только шапка
+
+                time.sleep(5)
+            except Exception as e:
+                print(f"Error during filter click {i}: {e}")
