@@ -21,3 +21,6 @@ venv\Scripts\activate
 
 # Install requirements
 pip install -r requirements.txt
+
+# run script
+python main.py
