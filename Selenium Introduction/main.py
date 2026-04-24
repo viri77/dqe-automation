@@ -74,14 +74,10 @@ def extract_doughnut_data(driver) -> list[list[str]]:
 
     return data
 
+def take_screenshot(driver, filename: str):
+    driver.save_screenshot(filename)
+    print(f"screenshot saved: {filename}")
 
-def take_chart_screenshot(driver, filename: str):
-    try:
-        chart = driver.find_element(By.CLASS_NAME, "pielayer")
-        chart.screenshot(filename)
-    except (NoSuchElementException, WebDriverException):
-        driver.save_screenshot(filename)
-    print(f"Screenshot saved: {filename}")
 
 
 def process_legend_filters(driver, doughnut_headers: list[str]):
@@ -92,7 +88,7 @@ def process_legend_filters(driver, doughnut_headers: list[str]):
             toggle.click()
             time.sleep(2)
 
-            take_chart_screenshot(driver, f"screenshot{i + 1}.png")
+            take_screenshot(driver, f"screenshot{i + 1}.png")
 
             time.sleep(1)
             data = extract_doughnut_data(driver)
@@ -120,7 +116,7 @@ if __name__ == "__main__":
             print(f"Table not found: {e}")
             raise
 
-        take_chart_screenshot(driver, "screenshot0.png")
+        take_screenshot(driver, "screenshot0.png")
 
         doughnut_headers = ["Facility Type", "Min average time spent"]
         data = extract_doughnut_data(driver)
