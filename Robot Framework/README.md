@@ -35,3 +35,6 @@ Copy files
 ```
 podman cp jenkins:/parquet_data "PyTest DQ Framework/parquet_data"
 ```
+
+# Run test
+robot --outputdir ./results test.robot
