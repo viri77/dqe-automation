@@ -1,1 +1,7 @@
-results
+
+venv/
+.venv/
+__pycache__/
+*.pyc
+.vscode/
+.codemie/
