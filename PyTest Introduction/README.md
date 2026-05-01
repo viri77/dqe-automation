@@ -24,6 +24,10 @@ pip install -r requirements.txt
 
 ## Command used to run tests
 
+# Run test integrated with reportportal
+
+pytest tests/ --reportportal
+
 # Run all tests
 pytest tests
 

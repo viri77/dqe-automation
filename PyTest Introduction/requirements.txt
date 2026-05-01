@@ -1,3 +1,4 @@
 pytest
 pandas
 pytest-html
+pytest-reportportal
