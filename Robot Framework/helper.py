@@ -1,36 +1,42 @@
-import base64
-import struct
-
 import pandas as pd
 import pyarrow.parquet as pq
 from pathlib import Path
+from selenium.webdriver.common.by import By
 
 
 def read_html_table(table_element):
-    """Read Plotly table trace from a Selenium WebElement into a pandas DataFrame.
+    """Read Plotly table from a Selenium WebElement into a pandas DataFrame.
 
-    Expects a WebElement pointing to the Plotly graph div. Uses JavaScript to
-    retrieve the embedded figure data and extracts the first 'table' trace.
-    Column names are normalised to snake_case.
+    Finds DOM elements by class name. Column names are normalised to snake_case.
     """
     driver = table_element.parent
-    figure_data = driver.execute_script("return arguments[0].data;", table_element)
+    table = driver.find_element(By.CLASS_NAME, "table")
+    columns = table.find_elements(By.CLASS_NAME, "y-column")
 
-    if not figure_data:
-        raise ValueError("No Plotly data found on element")
+    headers = []
+    values = []
 
-    table_trace = next((t for t in figure_data if t.get("type") == "table"), None)
-    if not table_trace:
-        raise ValueError("No Plotly 'table' trace found in figure data")
+    for col in columns:
+        header_blocks = col.find_elements(By.ID, "header")
+        for block in header_blocks:
+            headers.append(block.text)
+        if col.get_attribute("id") != "header":
+            values.append(col.text)
 
-    headers = table_trace.get("header", {}).get("values", [])
-    cell_values = table_trace.get("cells", {}).get("values", [])
+    data_columns = [col.split("\n") for col in values]
+    num_rows = min((len(col) - 1) for col in data_columns) if data_columns else 0
 
-    if not headers:
-        headers = [f"col_{i}" for i in range(len(cell_values))]
+    rows = []
+    for i in range(num_rows):
+        row = [data_columns[j][i] for j in range(len(data_columns))]
+        rows.append(row)
 
-    df = pd.DataFrame(dict(zip(headers, cell_values)))
+    df = pd.DataFrame(rows, columns=headers)
     df.columns = [c.lower().replace(" ", "_") for c in df.columns]
+    for col in df.columns:
+        converted = pd.to_numeric(df[col], errors="coerce")
+        if not converted.isna().any():
+            df[col] = converted
     return df
 
 
@@ -103,41 +109,6 @@ def rename_dataframe_columns(df, **column_mapping):
     return df.rename(columns=column_mapping)
 
 
-def read_html_pie_chart(element):
-    """Read Plotly pie trace from a Selenium WebElement into a pandas DataFrame.
-
-    Returns a DataFrame with columns: facility_type, min_avg_time_spent.
-    Handles Plotly's base64-encoded typed array format for values.
-    """
-    driver = element.parent
-    figure_data = driver.execute_script("return arguments[0].data;", element)
-
-    if not figure_data:
-        raise ValueError("No Plotly data found on element")
-
-    pie_trace = next((t for t in figure_data if t.get("type") == "pie"), None)
-    if not pie_trace:
-        raise ValueError("No Plotly 'pie' trace found in figure data")
-
-    labels = pie_trace.get("labels", [])
-    values = pie_trace.get("values", [])
-
-    if isinstance(values, dict) and "bdata" in values:
-        values = _decode_plotly_typed_array(values)
-
-    return pd.DataFrame({"facility_type": labels, "min_avg_time_spent": values})
-
-
-def compute_min_avg_by_group(df, group_col="facility_type", value_col="avg_time_spent"):
-    """Return a DataFrame with the minimum value per group.
-
-    Returns columns: {group_col}, min_avg_time_spent.
-    """
-    result = df.groupby(group_col)[value_col].min().reset_index()
-    result.columns = [group_col, "min_avg_time_spent"]
-    return result
-
-
 def get_file_url(path):
     """Convert an absolute or relative file path to a file:// URL.
 
@@ -145,15 +116,6 @@ def get_file_url(path):
     to use with both absolute paths and Robot Framework ${CURDIR}-based paths.
     """
     return Path(path).resolve().as_uri()
-
-
-def _decode_plotly_typed_array(typed_array):
-    """Decode a Plotly typed array dict {"dtype": "f8", "bdata": "..."} to a list."""
-    fmt_map = {"f8": "d", "f4": "f", "i4": "i", "i2": "h", "u1": "B"}
-    fmt_char = fmt_map.get(typed_array.get("dtype", "f8"), "d")
-    raw = base64.b64decode(typed_array["bdata"])
-    n = len(raw) // struct.calcsize(fmt_char)
-    return list(struct.unpack(f"<{n}{fmt_char}", raw))
 
 
 def _normalize_df(df):

@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-04-27T13:58:27.953319" rpa="false" schemaversion="5">
+<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-05-01T13:40:44.176694" rpa="false" schemaversion="5">
 <suite id="s1" name="Test" source="C:\Users\OlhaKarpenko\PycharmProjects\dq\dqe-automation\Robot Framework\test.robot">
 <test id="s1-t1" name="Validate HTML Table Matches Parquet Data" line="16">
 <kw name="Get File Url" owner="helper">
-<msg time="2026-04-27T13:58:28.489350" level="INFO">${file_url} = file:///C:/Users/OlhaKarpenko/PycharmProjects/dq/dqe-automation/Robot%20Framework/generated_report/report.html</msg>
+<msg time="2026-05-01T13:40:44.671815" level="INFO">${file_url} = file:///C:/Users/OlhaKarpenko/PycharmProjects/dq/dqe-automation/Robot%20Framework/generated_report/report.html</msg>
 <var>${file_url}</var>
 <arg>${REPORT_FILE}</arg>
 <doc>Convert an absolute or relative file path to a file:// URL.</doc>
-<status status="PASS" start="2026-04-27T13:58:28.488883" elapsed="0.000498"/>
+<status status="PASS" start="2026-05-01T13:40:44.671391" elapsed="0.000453"/>
 </kw>
 <kw name="Open Browser" owner="SeleniumLibrary">
-<msg time="2026-04-27T13:58:28.489710" level="INFO">Opening browser 'Chrome' to base url 'file:///C:/Users/OlhaKarpenko/PycharmProjects/dq/dqe-automation/Robot%20Framework/generated_report/report.html'.</msg>
+<msg time="2026-05-01T13:40:44.672138" level="INFO">Opening browser 'Chrome' to base url 'file:///C:/Users/OlhaKarpenko/PycharmProjects/dq/dqe-automation/Robot%20Framework/generated_report/report.html'.</msg>
 <arg>${file_url}</arg>
 <arg>${BROWSER}</arg>
 <doc>Opens a new browser instance to the optional ``url``.</doc>
-<status status="PASS" start="2026-04-27T13:58:28.489511" elapsed="2.054962"/>
+<status status="PASS" start="2026-05-01T13:40:44.671967" elapsed="1.950277"/>
 </kw>
 <kw name="Maximize Browser Window" owner="SeleniumLibrary">
 <doc>Maximizes current browser window.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.544708" elapsed="0.039259"/>
+<status status="PASS" start="2026-05-01T13:40:46.622515" elapsed="0.026484"/>
 </kw>
 <kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
 <arg>css:.plotly-graph-div</arg>
 <arg>timeout=15s</arg>
 <doc>Waits until the element ``locator`` is visible.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.584122" elapsed="0.023671"/>
+<status status="PASS" start="2026-05-01T13:40:46.649168" elapsed="0.021180"/>
 </kw>
 <kw name="Get WebElement" owner="SeleniumLibrary">
-<msg time="2026-04-27T13:58:30.618008" level="INFO">${table_element} = &lt;selenium.webdriver.remote.webelement.WebElement (session="c9d0d06dac7bb1cee38e2a34868898f5", element="f.9C8A36A24E1C0BE3A3C5D1852F367F68.d.57E08F614B3E7BDB79E92CEC568C36E1.e.3")&gt;</msg>
+<msg time="2026-05-01T13:40:46.679446" level="INFO">${table_element} = &lt;selenium.webdriver.remote.webelement.WebElement (session="0f72db6455fad64b78b4582a33cf06f4", element="f.FCD4211CA25CA111C713E89E1E3A3636.d.DD5B7E54798626911B8A84FDB2FAFD72.e.3")&gt;</msg>
 <var>${table_element}</var>
 <arg>css:.plotly-graph-div</arg>
 <doc>Returns the first WebElement matching the given ``locator``.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.608045" elapsed="0.010008"/>
+<status status="PASS" start="2026-05-01T13:40:46.670670" elapsed="0.008987"/>
 </kw>
 <kw name="Read Html Table" owner="helper">
-<msg time="2026-04-27T13:58:30.640891" level="INFO">${html_df} =        facility_type  visit_date  average_time_spent
+<msg time="2026-05-01T13:40:46.824811" level="INFO">${html_df} =        facility_type  visit_date  average_time_spent
 0   Specialty Center  2026-04-16               27.00
 1           Hospital  2026-04-16               52.00
 2             Clinic  2026-04-16         ...</msg>
 <var>${html_df}</var>
 <arg>${table_element}</arg>
-<doc>Read Plotly table trace from a Selenium WebElement into a pandas DataFrame.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.618208" elapsed="0.022881"/>
+<doc>Read Plotly table from a Selenium WebElement into a pandas DataFrame.</doc>
+<status status="PASS" start="2026-05-01T13:40:46.679971" elapsed="0.144892"/>
 </kw>
 <kw name="Rename Dataframe Columns" owner="helper">
-<msg time="2026-04-27T13:58:30.651333" level="INFO">${html_df} =        facility_type  visit_date  avg_time_spent
+<msg time="2026-05-01T13:40:46.830648" level="INFO">${html_df} =        facility_type  visit_date  avg_time_spent
 0   Specialty Center  2026-04-16           27.00
 1           Hospital  2026-04-16           52.00
 2             Clinic  2026-04-16           22.00
@@ -53,10 +53,10 @@
 <arg>${html_df}</arg>
 <arg>average_time_spent=avg_time_spent</arg>
 <doc>Return a copy of df with columns renamed according to column_mapping.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.641889" elapsed="0.009546"/>
+<status status="PASS" start="2026-05-01T13:40:46.825009" elapsed="0.005743"/>
 </kw>
 <kw name="Read Parquet Data" owner="helper">
-<msg time="2026-04-27T13:58:30.805518" level="INFO">${parquet_df} =        facility_type visit_date  avg_time_spent
+<msg time="2026-05-01T13:40:46.979472" level="INFO">${parquet_df} =        facility_type visit_date  avg_time_spent
 0             Clinic 2026-04-11           48.00
 1   Specialty Center 2026-04-13           52.33
 2   Specialty Center 2026-04-11           34.00
@@ -65,82 +65,41 @@
 <arg>${PARQUET_FOLDER}</arg>
 <arg>${FILTER_DATE}</arg>
 <doc>Read a partitioned Parquet dataset with optional date filtering.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.651701" elapsed="0.153883"/>
+<status status="PASS" start="2026-05-01T13:40:46.830923" elapsed="0.148626"/>
 </kw>
 <kw name="Compare Dataframes" owner="helper">
-<msg time="2026-04-27T13:58:30.814891" level="INFO">${match} = True</msg>
-<msg time="2026-04-27T13:58:30.814951" level="INFO">${diff} = None</msg>
+<msg time="2026-05-01T13:40:46.985503" level="INFO">${match} = True</msg>
+<msg time="2026-05-01T13:40:46.985563" level="INFO">${diff} = None</msg>
 <var>${match}</var>
 <var>${diff}</var>
 <arg>${html_df}</arg>
 <arg>${parquet_df}</arg>
 <doc>Compare two DataFrames for an exact match after normalising types and sort order.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.805748" elapsed="0.009224"/>
+<status status="PASS" start="2026-05-01T13:40:46.979747" elapsed="0.005838"/>
 </kw>
 <if>
 <branch type="IF" condition="not ${match}">
 <kw name="Fail" owner="BuiltIn">
 <arg>Data mismatch between HTML table and Parquet dataset:\n${diff}</arg>
 <doc>Fails the test with the given message and optionally alters its tags.</doc>
-<status status="NOT RUN" start="2026-04-27T13:58:30.815386" elapsed="0.000027"/>
+<status status="NOT RUN" start="2026-05-01T13:40:46.985996" elapsed="0.000027"/>
 </kw>
-<status status="NOT RUN" start="2026-04-27T13:58:30.815119" elapsed="0.000329"/>
+<status status="NOT RUN" start="2026-05-01T13:40:46.985737" elapsed="0.000318"/>
 </branch>
-<status status="PASS" start="2026-04-27T13:58:30.815081" elapsed="0.000402"/>
-</if>
-<kw name="Read Html Pie Chart" owner="helper">
-<msg time="2026-04-27T13:58:30.823135" level="INFO">${html_pie_df} =       facility_type  min_avg_time_spent
-0            Clinic                22.0
-1          Hospital                23.0
-2  Specialty Center                27.0</msg>
-<var>${html_pie_df}</var>
-<arg>${table_element}</arg>
-<doc>Read Plotly pie trace from a Selenium WebElement into a pandas DataFrame.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.815549" elapsed="0.007648"/>
-</kw>
-<kw name="Compute Min Avg By Group" owner="helper">
-<msg time="2026-04-27T13:58:30.827313" level="INFO">${parquet_pie_df} =       facility_type  min_avg_time_spent
-0            Clinic                22.0
-1          Hospital                23.0
-2  Specialty Center                27.0</msg>
-<var>${parquet_pie_df}</var>
-<arg>${parquet_df}</arg>
-<doc>Return a DataFrame with the minimum value per group.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.823465" elapsed="0.003893"/>
-</kw>
-<kw name="Compare Dataframes" owner="helper">
-<msg time="2026-04-27T13:58:30.830906" level="INFO">${pie_match} = True</msg>
-<msg time="2026-04-27T13:58:30.830956" level="INFO">${pie_diff} = None</msg>
-<var>${pie_match}</var>
-<var>${pie_diff}</var>
-<arg>${html_pie_df}</arg>
-<arg>${parquet_pie_df}</arg>
-<doc>Compare two DataFrames for an exact match after normalising types and sort order.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.827504" elapsed="0.003470"/>
-</kw>
-<if>
-<branch type="IF" condition="not ${pie_match}">
-<kw name="Fail" owner="BuiltIn">
-<arg>Pie chart mismatch between HTML and Parquet:\n${pie_diff}</arg>
-<doc>Fails the test with the given message and optionally alters its tags.</doc>
-<status status="NOT RUN" start="2026-04-27T13:58:30.831229" elapsed="0.000020"/>
-</kw>
-<status status="NOT RUN" start="2026-04-27T13:58:30.831071" elapsed="0.000200"/>
-</branch>
-<status status="PASS" start="2026-04-27T13:58:30.831046" elapsed="0.000250"/>
+<status status="PASS" start="2026-05-01T13:40:46.985698" elapsed="0.000391"/>
 </if>
 <kw name="Close Browser" owner="SeleniumLibrary" type="TEARDOWN">
 <doc>Closes the current browser.</doc>
-<status status="PASS" start="2026-04-27T13:58:30.831443" elapsed="2.112822"/>
+<status status="PASS" start="2026-05-01T13:40:46.986293" elapsed="2.108164"/>
 </kw>
 <doc>Opens the HTML report in Chrome, reads the Plotly table into a
 DataFrame, reads the Parquet dataset filtered by 2026-04-16,
 and asserts that both DataFrames are identical.</doc>
-<status status="PASS" start="2026-04-27T13:58:28.488192" elapsed="4.456267"/>
+<status status="PASS" start="2026-05-01T13:40:44.670750" elapsed="4.423928"/>
 </test>
 <doc>Validates that the HTML report table matches the Parquet dataset.
 Test passes when data is identical; fails with a diff when mismatches exist.</doc>
-<status status="PASS" start="2026-04-27T13:58:27.954546" elapsed="4.990967"/>
+<status status="PASS" start="2026-05-01T13:40:44.178093" elapsed="4.917839"/>
 </suite>
 <statistics>
 <total>

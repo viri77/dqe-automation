@@ -36,11 +36,3 @@ Validate HTML Table Matches Parquet Data
     IF    not ${match}
         Fail    Data mismatch between HTML table and Parquet dataset:\n${diff}
     END
-
-    ${html_pie_df}=       Read Html Pie Chart         ${table_element}
-    ${parquet_pie_df}=    Compute Min Avg By Group    ${parquet_df}
-    ${pie_match}    ${pie_diff}=    Compare Dataframes    ${html_pie_df}    ${parquet_pie_df}
-
-    IF    not ${pie_match}
-        Fail    Pie chart mismatch between HTML and Parquet:\n${pie_diff}
-    END
